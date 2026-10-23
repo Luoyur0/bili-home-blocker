@@ -95,30 +95,37 @@ Chrome 版把「取消请求」换成了「重定向到自己的页面」，好�
 
 ## 安装
 
+去 [Releases](../../releases) 下载对应版本的产物——两个版本共用同一个版本号（当前 **1.2.1**）：
+
+| 浏览器 | 下载 | 装法 |
+| --- | --- | --- |
+| Firefox 115+ | `bili-home-blocker-firefox-<version>.xpi` | 临时载入（重启失效）或签名后长期安装，见下 |
+| Chrome / Edge 102+ | `bili-home-blocker-chrome-<version>.zip` | 解压后「加载已解压的扩展程序」，见下 |
+
 ### Firefox
 
-临时载入（重启 Firefox 后失效，适合先试）：
-
-1. 地址栏打开 `about:debugging#/runtime/this-firefox`
-2. 点「临时载入附加组件…」
-3. 选中 `main` 分支根目录的 `manifest.json`
-
-长期安装：Firefox 正式版要求扩展签名，两条路——
-
-- **AMO 自签名（免费）**：把 `.xpi` 上传到 [addons.mozilla.org](https://addons.mozilla.org/developers/)，选 “On your own” / unlisted，几分钟后下载签名版安装；
-- **开发版 Firefox**：在 Developer Edition / Nightly 里把 `about:config` 的 `xpinstall.signatures.required` 设为 `false`，再把 `.xpi` 拖进浏览器。
+1. 到 [Releases](../../releases) 下载 `bili-home-blocker-firefox-<version>.xpi`。
+2. **临时载入（最快，先这么试就行）**：地址栏打开 `about:debugging#/runtime/this-firefox` → 点「临时载入附加组件…」→ 选刚下载的那个 `.xpi`。立刻生效，但**重启 Firefox 后就没了**，下次要再载一次。
+3. **长期安装**：正式版 Firefox 只认签名过的扩展，未签名的 xpi 直接拖进去会被拒，两条路——
+   - **AMO 自签名（免费）**：把这个 xpi 上传到 [addons.mozilla.org](https://addons.mozilla.org/developers/)，提交时选 “On your own” / unlisted（自发行），等自动审核通过后下载签名版，点一下就能装进 Firefox；
+   - **开发版 Firefox**：在 Developer Edition / Nightly 里把 `about:config` 的 `xpinstall.signatures.required` 设为 `false`，再把 xpi 拖进浏览器。
+4. 装好后工具栏出现图标，点开就是开关。
 
 ### Chrome
 
-1. 地址栏打开 `chrome://extensions`
-2. 右上角打开「开发者模式」
-3. 点「加载已解压的扩展程序」，选 `chrome` 分支根目录
+1. 到 [Releases](../../releases) 下载 `bili-home-blocker-chrome-<version>.zip`，**解压到一个固定的目录**——Chrome 是从这个目录加载的，解压完别删。
+2. 地址栏打开 `chrome://extensions`，右上角打开「开发者模式」。
+3. 点「加载已解压的扩展程序」，选**解压出来的目录**（里面能直接看到 `manifest.json`）。
 
-Chrome 不接受直接拖 zip / 未签名的 crx。要上架 Chrome 应用商店需要开发者账号；只想自己用的话「加载已解压」就够了，缺点是每次启动会提示「已停用开发者模式扩展」。
+Chrome 不接受直接拖 zip / 未签名的 crx。要上架 Chrome 应用商店需要开发者账号；只想自己用的话「加载已解压」就够了，代价是每次启动会提示「已停用开发者模式扩展」，点掉即可。
 
 ### Edge
 
-和 Chrome 一样，只是地址换成 `edge://extensions`，同样在左下角打开「开发人员模式」后「加载解压缩的扩展」。Edge 的扩展商店也接受 Chromium 的 MV3 包。
+和 Chrome 一样：产物还是那个 zip，地址换成 `edge://extensions`，在左下角打开「开发人员模式」后「加载解压缩的扩展」，选解压出来的目录。Edge 的扩展商店也接受 Chromium 的 MV3 包。
+
+### 改代码时不用发版
+
+不想下产物、想直接跑当前源码：Firefox 在 `about:debugging#/runtime/this-firefox` 里「临时载入附加组件…」选分支根目录的 `manifest.json`（同样重启失效）；Chrome / Edge 把「加载已解压」直接指向仓库目录。验证没问题再打包发版。
 
 ## 文件
 
@@ -170,7 +177,6 @@ Chrome / Edge 版（`chrome` 分支）：
 
 ## 说明
 
-本仓库只放扩展源码，不含打包产物。
+本仓库只放扩展源码，打包产物都在 [Releases](../../releases)：每个版本同时给出 `bili-home-blocker-firefox-<version>.xpi`（Firefox）与 `bili-home-blocker-chrome-<version>.zip`（Chrome / Edge），两个版本共用同一个版本号，发版时一起出。
 
-- **现成产物**在 [Releases](../../releases)：`bili-home-blocker-firefox-<version>.xpi`（Firefox）与 `bili-home-blocker-chrome-<version>.zip`（Chrome / Edge），两个版本共用同一个版本号。
-- **自己打包**：把分支根目录的文件压成 zip 容器，Firefox 那份后缀改成 `.xpi` 即可；改完代码也可以直接「临时载入」/「加载已解压」验证，稳定后再打包发布。
+自己打包：把分支根目录的文件压成 zip 容器即可，Firefox 那份把后缀改成 `.xpi`（要装进正式版 Firefox 还得先过 AMO 签名，见[安装](#安装)）。打包只是套一层 zip 容器，不改写、不合并、不压缩代码，所以包里的文件与源码逐字节相同。
