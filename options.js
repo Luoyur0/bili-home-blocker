@@ -1,6 +1,6 @@
 "use strict";
 
-/* global readSettings, writeSettings, validateRedirect, isWhitelistedDay */
+/* global readSettings, writeSettings, validateRedirect, isWhitelistedDay, LAST_TAB_REDIRECT_DEFAULT */
 
 // 周一在前、周日在后，和中文习惯一致；day 用 Date#getDay() 的编号（0 = 周日）。
 const DAY_LABELS = [
@@ -28,7 +28,12 @@ const todayEl = document.getElementById("today");
 const statusEl = document.getElementById("status");
 const resetBtn = document.getElementById("reset");
 
-let current = { enabled: true, lastTabRedirect: "", videoHomeRedirect: "", whitelistDays: [] };
+let current = {
+  enabled: true,
+  lastTabRedirect: LAST_TAB_REDIRECT_DEFAULT,
+  videoHomeRedirect: "",
+  whitelistDays: []
+};
 let statusTimer = 0;
 
 function setStatus(text, kind = "ok") {
@@ -91,7 +96,9 @@ async function saveRedirect(key) {
 
   current = await writeSettings({ [key]: value });
   input.value = current[key];
-  setStatus(value ? "已保存" : "已清空，使用默认行为");
+  const clearedHint =
+    key === "lastTabRedirect" ? "已清空，改为关掉标签页 / 显示提示页" : "已清空，改为拦下跳转、留在视频页";
+  setStatus(value ? "已保存" : clearedHint);
 }
 
 for (const [key, input] of Object.entries(REDIRECT_INPUTS)) {
@@ -107,7 +114,11 @@ for (const [key, input] of Object.entries(REDIRECT_INPUTS)) {
 /* ---------------- 恢复默认 ---------------- */
 
 resetBtn.addEventListener("click", async () => {
-  current = await writeSettings({ lastTabRedirect: "", videoHomeRedirect: "", whitelistDays: [] });
+  current = await writeSettings({
+    lastTabRedirect: LAST_TAB_REDIRECT_DEFAULT,
+    videoHomeRedirect: "",
+    whitelistDays: []
+  });
   for (const [key, input] of Object.entries(REDIRECT_INPUTS)) {
     input.value = current[key];
     REDIRECT_ERRORS[key].textContent = "";
