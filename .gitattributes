@@ -1,0 +1,6 @@
+# 扩展源码统一用 LF：跨平台 checkout 后与仓库里的字节一致，
+# 两个版本的共享文件（settings.js / home-url.js）才能靠逐字节比对守住一致性。
+* text=auto eol=lf
+*.png binary
+*.xpi binary
+*.zip binary

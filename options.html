@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B站首页拦截器 · 设置</title>
+<style>
+  :root {
+    --pink: #fb7299;
+    --ink: #18191c;
+    --muted: #61666d;
+    --line: #e3e5e7;
+    --bg: #f6f7f8;
+    --card: #ffffff;
+    --field: #ffffff;
+    --on: #fb7299;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e3e5e7;
+      --muted: #9499a0;
+      --line: #2f3134;
+      --bg: #17181a;
+      --card: #1e1f22;
+      --field: #26272b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px 64px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.7 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  main { max-width: 620px; margin: 0 auto; }
+  header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 26px;
+  }
+  .whale { font-size: 2.1rem; line-height: 1.1; }
+  h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+  .sub { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; }
+  section {
+    margin-bottom: 16px;
+    padding: 18px 20px 20px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  h2 {
+    margin: 0 0 6px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .desc {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--field);
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+  }
+  input[type="text"]::placeholder { color: var(--muted); opacity: .75; }
+  input[type="text"]:focus {
+    outline: 2px solid var(--pink);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .err {
+    min-height: 1.2em;
+    margin: 6px 0 0;
+    color: #e5484d;
+    font-size: 12px;
+  }
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .day {
+    padding: 9px 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: background .14s ease, color .14s ease, border-color .14s ease;
+  }
+  .day:hover { border-color: var(--pink); color: var(--ink); }
+  .day.on {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: #fff;
+    font-weight: 600;
+  }
+  .day:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
+  .today { margin: 0; color: var(--muted); font-size: 12.5px; }
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  #reset {
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+  #reset:hover { color: var(--ink); border-color: var(--muted); }
+  #status {
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  #status[data-kind="error"] { color: #e5484d; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="whale">🐋</span>
+    <div>
+      <h1>B站首页拦截器 · 设置</h1>
+      <p class="sub">改完立刻生效，不用重启浏览器。设置只存在本机。</p>
+    </div>
+  </header>
+
+  <section>
+    <h2>空标签页里打开 B 站首页时</h2>
+    <p class="desc">
+      直接关掉这个标签页，窗口里只剩它一个时，显示「B 站首页已被拦截」提示页。填了网址就改成跳到它 ——
+      不管窗口里还有没有别的标签页。
+    </p>
+    <input id="last-tab" type="text" inputmode="url" spellcheck="false" autocomplete="off"
+           placeholder="留空 = 关掉标签页 / 显示拦截提示页">
+    <p class="err" id="last-tab-err"></p>
+  </section>
+
+  <section>
+    <h2>看视频时点回首页</h2>
+    <p class="desc">
+      在视频页点顶部 logo 跳回首页时，会拦下跳转、留在视频页继续播。填了网址就改成跳到它。
+    </p>
+    <input id="video-home" type="text" inputmode="url" spellcheck="false" autocomplete="off"
+           placeholder="留空 = 拦下跳转，留在视频页">
+    <p class="err" id="video-home-err"></p>
+  </section>
+
+  <section>
+    <h2>白名单日期</h2>
+    <p class="desc">点亮的星期整天不拦截，B 站首页照常打开。再点一下取消。</p>
+    <div class="days" id="days"></div>
+    <p class="today" id="today"></p>
+  </section>
+
+  <footer>
+    <button id="reset" type="button">全部恢复默认</button>
+    <span id="status" role="status" aria-live="polite"></span>
+  </footer>
+</main>
+<script src="settings.js"></script>
+<script src="home-url.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

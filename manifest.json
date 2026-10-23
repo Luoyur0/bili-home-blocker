@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "B站首页拦截器",
+  "version": "1.2.1",
+  "description": "打开 B 站首页时拦下来；新标签页打开就直接关掉。视频、个人空间、搜索等页面不受影响。开关可随时暂停，也能把拦截改成跳转到自己指定的网址，并设置不拦截的星期。",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bili-home-blocker@whale.local",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  },
+  "permissions": [
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://bilibili.com/*",
+    "*://*.bilibili.com/*"
+  ],
+  "background": {
+    "scripts": [
+      "settings.js",
+      "home-url.js",
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "B站首页拦截器",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon.svg",
+      "32": "icons/icon.svg",
+      "48": "icons/icon.svg",
+      "96": "icons/icon.svg"
+    }
+  },
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  }
+}

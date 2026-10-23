@@ -1,0 +1,14 @@
+# 打包产物
+dist/
+*.xpi
+*.zip
+*.crx
+*.pem
+
+# 系统 / 编辑器杂物
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/

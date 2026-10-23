@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B 站首页已被拦截</title>
+<style>
+  :root {
+    --pink: #fb7299;
+    --ink: #18191c;
+    --muted: #61666d;
+    --bg: #f6f7f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #e3e5e7; --muted: #9499a0; --bg: #17181a; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.75 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  main {
+    max-width: 30rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .whale { font-size: 3rem; line-height: 1; }
+  h1 { margin: 1rem 0 .75rem; font-size: 1.3rem; font-weight: 600; }
+  p { margin: .5rem 0; color: var(--muted); }
+  button {
+    margin-top: 1.75rem;
+    padding: .7rem 1.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--pink);
+    color: #fff;
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(1.06); }
+  button:active { transform: translateY(1px); }
+  .tip { margin-top: 1.25rem; font-size: .85rem; opacity: .8; }
+  button.link {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pink);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  button.link:hover { filter: none; opacity: .85; }
+</style>
+</head>
+<body>
+  <main>
+    <div class="whale">🐋</div>
+    <h1>B 站首页已被拦截</h1>
+    <p>你在一个空标签页里打开了 B 站首页，本来会被直接关掉。</p>
+    <p>这是当前窗口唯一的标签页，关掉会让整个窗口消失，所以先留了这一页。</p>
+    <button id="close-tab" type="button">关闭这个标签页</button>
+    <p class="tip">
+      想放行：点工具栏的拦截器图标，把开关关掉；<br>
+      想把这一页换成别的网址：<button class="link" id="open-options" type="button">打开设置</button>
+    </p>
+  </main>
+  <script src="blocked.js"></script>
+</body>
+</html>
