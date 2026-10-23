@@ -1,8 +1,8 @@
 # 打包产物
 dist/
-*.xpi
 *.zip
 *.crx
+*.xpi
 *.pem
 
 # 系统 / 编辑器杂物

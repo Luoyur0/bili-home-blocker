@@ -16,6 +16,8 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
+  /* 这张页面被重定向过来时先什么都不显示：后台可能马上就把标签页关掉或换走 */
+  body.pending main { visibility: hidden; }
   body {
     margin: 0;
     display: grid;
@@ -60,18 +62,19 @@
   button.link:hover { filter: none; opacity: .85; }
 </style>
 </head>
-<body>
+<body class="pending">
   <main>
     <div class="whale">🐋</div>
     <h1>B 站首页已被拦截</h1>
-    <p>你在一个空标签页里打开了 B 站首页，本来会被直接关掉。</p>
-    <p>这是当前窗口唯一的标签页，关掉会让整个窗口消失，所以先留了这一页。</p>
+    <p>这次要打开的 B 站首页已经被拦下来了。</p>
+    <p>按设置，这一页本该被关掉或退回上一页；关掉会带走整个窗口、又没有上一页可退时，就先留了这张提示页。</p>
     <button id="close-tab" type="button">关闭这个标签页</button>
     <p class="tip">
       想放行：点工具栏的拦截器图标，把开关关掉；<br>
       想把这一页换成别的网址：<button class="link" id="open-options" type="button">打开设置</button>
     </p>
   </main>
+  <script src="platform.js"></script>
   <script src="blocked.js"></script>
 </body>
 </html>
