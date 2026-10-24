@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B 站首页已被拦截</title>
+<style>
+  :root {
+    --pink: #fb7299;
+    --ink: #18191c;
+    --muted: #61666d;
+    --bg: #f6f7f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #e3e5e7; --muted: #9499a0; --bg: #17181a; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  /* 这张页面被重定向过来时先什么都不显示：后台可能马上就把标签页关掉或换走 */
+  body.pending main { visibility: hidden; }
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.75 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  main {
+    max-width: 30rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .whale { font-size: 3rem; line-height: 1; }
+  h1 { margin: 1rem 0 .75rem; font-size: 1.3rem; font-weight: 600; }
+  p { margin: .5rem 0; color: var(--muted); }
+  button {
+    margin-top: 1.75rem;
+    padding: .7rem 1.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--pink);
+    color: #fff;
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(1.06); }
+  button:active { transform: translateY(1px); }
+  .tip { margin-top: 1.25rem; font-size: .85rem; opacity: .8; }
+  button.link {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pink);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  button.link:hover { filter: none; opacity: .85; }
+</style>
+</head>
+<body class="pending">
+  <main>
+    <div class="whale">🐋</div>
+    <h1>B 站首页已被拦截</h1>
+    <p>这次要打开的 B 站首页已经被拦下来了。</p>
+    <p>按设置，这一页本该被关掉或退回上一页；关掉会带走整个窗口、又没有上一页可退时，就先留了这张提示页。</p>
+    <button id="close-tab" type="button">关闭这个标签页</button>
+    <p class="tip">
+      想放行：点工具栏的拦截器图标，把开关关掉；<br>
+      想把这一页换成别的网址：<button class="link" id="open-options" type="button">打开设置</button>
+    </p>
+  </main>
+  <script src="platform.js"></script>
+  <script src="blocked.js"></script>
+</body>
+</html>

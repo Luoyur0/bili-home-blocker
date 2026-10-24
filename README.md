@@ -8,12 +8,20 @@
 
 ## 两个版本
 
-同一套功能写了两个版本，分在仓库的两条分支里，**分支根目录就是扩展目录**（点开分支直接看到 `manifest.json`）：
+同一套功能写了两个版本，放在同一个仓库的两个子目录里，**子目录就是扩展目录**（点开直接看到 `manifest.json`）：
 
-| 浏览器 | 说明 | 分支 |
+| 浏览器 | 说明 | 目录 |
 | --- | --- | --- |
-| Firefox 115+ | 按 Firefox 的 WebExtension 接口实现 | [`main`](../../tree/main) |
-| Chrome / Edge 102+ | 同一套功能，按 Chromium 内核重写 | [`chrome`](../../tree/chrome) |
+| Firefox 115+ | 按 Firefox 的 WebExtension 接口实现 | [`bili-home-blocker-firefox/`](bili-home-blocker-firefox) |
+| Chrome / Edge 102+ | 同一套功能，按 Chromium 内核重写 | [`bili-home-blocker-chrome/`](bili-home-blocker-chrome) |
+
+仓库结构就三层，两个版本各占一个目录，共享文件放在各自的目录里（两边逐字节相同）：
+
+```
+bili-home-blocker/
+├── bili-home-blocker-firefox/    Firefox 版，扩展根目录
+└── bili-home-blocker-chrome/     Chrome / Edge 版，扩展根目录
+```
 
 两个版本共用同一个版本号（当前 **1.2.2**），功能一致：同一个开关、同一套设置、同一张拦截提示页、同一套计数角标。`settings.js` 与 `home-url.js` 是**同一份文件**（两边逐字节相同），只有跟浏览器打交道的那一层按各自的内核重写，具体差别见[两个版本的实现差别](#两个版本的实现差别)。
 
@@ -114,7 +122,7 @@ Chrome 版把「取消请求」换成了「重定向到自己的页面」，好�
 
 ## 文件
 
-Firefox 版（`main` 分支）：
+Firefox 版（`bili-home-blocker-firefox/`）：
 
 | 文件 | 作用 |
 | --- | --- |
@@ -127,7 +135,7 @@ Firefox 版（`main` 分支）：
 | `popup.html` `popup.js` | 工具栏弹窗：开关、今日 / 累计拦截数、清零、设置入口 |
 | `icons/icon.svg` | 图标 |
 
-Chrome / Edge 版（`chrome` 分支）：
+Chrome / Edge 版（`bili-home-blocker-chrome/`）：
 
 | 文件 | 作用 |
 | --- | --- |
@@ -158,4 +166,4 @@ Chrome / Edge 版（`chrome` 分支）：
 
 打包产物在 [Releases](../../releases)：每个版本同时给出 `bili-home-blocker-firefox-<version>.xpi`（Firefox）与 `bili-home-blocker-chrome-<version>.zip`（Chrome / Edge），两个版本共用同一个版本号，发版时一起出。
 
-自行打包：把分支根目录的文件压成 zip 容器即可，Firefox 那份把后缀改成 `.xpi`（要装进正式版 Firefox 还得先过 AMO 签名，见[安装](#安装)）。打包只是套一层 zip 容器，不改写、不合并、不压缩代码，所以包里的文件与源码逐字节相同。
+自行打包：把对应子目录里的文件压成 zip 容器即可，Firefox 那份把后缀改成 `.xpi`（要装进正式版 Firefox 还得先过 AMO 签名，见[安装](#安装)）。打包只是套一层 zip 容器，不改写、不合并、不压缩代码，所以包里的文件与源码逐字节相同。

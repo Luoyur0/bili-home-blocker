@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>B站首页拦截器</title>
+<style>
+  :root {
+    --pink: #fb7299;
+    --ink: #18191c;
+    --muted: #9499a0;
+    --line: #e3e5e7;
+    --track: #d7d9dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #e3e5e7; --muted: #9499a0; --line: #2f3134; --track: #3a3d40; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    width: 300px;
+    margin: 0;
+    padding: 14px 16px 16px;
+    color: var(--ink);
+    font: 13px/1.6 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+  header .name { flex: 1; }
+  .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--pink);
+    transition: background .16s ease;
+  }
+  .switch {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    cursor: pointer;
+  }
+  .switch input {
+    position: absolute;
+    width: 0; height: 0;
+    margin: 0;
+    opacity: 0;
+  }
+  .track {
+    display: block;
+    position: relative;
+    width: 34px; height: 18px;
+    border-radius: 999px;
+    background: var(--track);
+    transition: background .16s ease;
+  }
+  .thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    transition: transform .16s ease;
+  }
+  .switch input:checked + .track { background: var(--pink); }
+  .switch input:checked + .track .thumb { transform: translateX(16px); }
+  .switch input:focus-visible + .track { outline: 2px solid var(--pink); outline-offset: 2px; }
+  .hint {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 11.5px;
+  }
+  .stats {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    transition: opacity .16s ease;
+  }
+  .stats > div {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-align: center;
+  }
+  .stats strong {
+    display: block;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--pink);
+    font-variant-numeric: tabular-nums;
+  }
+  .stats span { color: var(--muted); font-size: 11.5px; }
+  .rules {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.7;
+    transition: opacity .16s ease;
+  }
+  .rules div + div { margin-top: 4px; }
+  .rules b { color: var(--ink); font-weight: 600; }
+  body.off .dot { background: var(--muted); }
+  body.off .stats,
+  body.off .rules { opacity: .45; }
+  code {
+    padding: 0 3px;
+    border-radius: 3px;
+    background: rgba(127, 127, 127, .16);
+    font-size: 11px;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    flex: 1;
+    padding: 6px 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  button:hover { color: var(--ink); border-color: var(--muted); }
+</style>
+</head>
+<body>
+  <header>
+    <span class="dot"></span>
+    <span class="name">B站首页拦截器</span>
+    <label class="switch" title="开 / 关拦截">
+      <input type="checkbox" id="toggle">
+      <span class="track"><span class="thumb"></span></span>
+    </label>
+  </header>
+  <p class="hint" id="hint"></p>
+  <div class="stats">
+    <div><strong id="today">0</strong><span>今天拦截</span></div>
+    <div><strong id="total">0</strong><span>累计拦截</span></div>
+  </div>
+  <div class="rules">
+    <div><b>空标签页打开首页</b> → 关掉它，或跳到设置的网址</div>
+    <div><b>看视频时点回首页</b> → 拦下跳转，视频页保持不动</div>
+    <div>其余页面（视频、空间、搜索、动态）一律不碰</div>
+  </div>
+  <div class="actions">
+    <button id="reset" type="button">清零计数</button>
+    <button id="options" type="button">设置…</button>
+  </div>
+  <script src="platform.js"></script>
+  <script src="settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
